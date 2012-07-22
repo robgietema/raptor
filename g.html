@@ -1,0 +1,511 @@
+<html><head><title>Raptor</title><script language="Javascript">
+bRun=1;
+iUpdateCount=0;
+iUpdateSpeed=2;
+iPlaneX=145;
+iPlaneY=173;
+iDrawnPlaneX=0;
+iDrawnPlaneY=0;
+iCurrentMapRow=0;
+iDrawnMapRow=0;
+iDrawnMapOffset=-1;
+iCurrentMapOffset=0;
+iDrawnPlane=1;
+iCurrentSector=0;
+iCurrentWave=0;
+iTotalMapRows=150;
+iDrawnScore=-1;
+iScore=0;
+iWeapon0=1;
+iWeapon3=1;
+iWeapon4=1;
+iCurrentWeapon=1;
+iCurrentLife=75;
+iCurrentShield=50;
+iCurrentShields=3;
+iDrawnLife=0;
+iDrawnShield=0;
+iDrawnShields=0;
+iDrawnWeapon=0;
+k=new Array();
+aMaps=new Array();
+aMapImages=new Array();
+aPlaneImages=new Array();
+aPlaneShadowImages=new Array();
+aFontImages=new Array();
+iCycles=0;
+aLastShotWeapon=[-1000,-1000,-1000,-1000,-1000];
+iLastShot=-1000;
+iWeaponChanged=-1000;
+aWeapons=new Array();
+aWeaponImages=new Array();
+aHudWeaponImages=new Array();
+gb=new Array();
+aEnemiesBullits=new Array();
+iEnemiesBullitCount=0;
+aEnemies=new Array();
+iEnemiesCount=130;
+iEnemiesTime=0;
+aEnemiesCurrent=new Array();
+iEnemiesCurrentCount=0;
+iEnemiesNumber=0;
+aEnemiesImages=new Array();
+aEnemiesShadowImages=new Array();
+aEnemiesTypes=new Array();
+aEnemiesBullitsImages=new Array();
+aExplosionImages=new Array();
+iBullitCount=0;
+iBullitNumber=0;
+iBossLife=8000;
+iBossX=144;
+iBossY=-80;
+iDrawnBossX=-1;
+iDrawnBossY=-1;
+iBossActive=0;
+iBossAnim=0;
+iBossAnimCount=0;
+aBossAnims=new Array();
+aBossBullits=new Array();
+iBossBullit=0;
+iBossBullitCount=0;
+sMap='¡¡¡¡¢£¤¥¦¡¡¡¢¤¥¥¦¨¡¡¡©¥ ¦¨,¢££¤¥¥¬­,¤¥¥¥¥¥¥¬§¥¦¯¥¥¥¥¥¥¦¨°¯¥¥¥¥±²¿´µ¥¥±¶·¬§µ¥I±·¡¡¹¥¥¥±·¡¡¡º¶¶¶·¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¢££¡¡¡¡¡¢¤¥¥¡¡¡¡¢¤¥ ¥¡¡¢£¤¥¥¦¼¡¡©¥I¥¦¨,¢£¤¥¥¥²¿,º¹¥¥¥¥¬§­¡©¥¥¥¥¥¥¬¡º¹¥¥¥¥¥¥¡¡º¶¶¹¥¥¥¡¡¡¡¡º¶¹¥¡¡¡¡¡¡¡º¶¡¡¢££!¡¡¡¡¢¤¥¥"!¡¡¢¤¥¥¥¥"!¡©¥ ¦¼¯¥"£©¥¥²#°¯¥¥º¹¥¬­,°%¼¡º¹¥¬§­¿,£!º¶¹I¬­,¯"!¡º¶¹¬­°¯"!¡¡©¥²Ä( )¡¢¤¦¨,°¯"£¤¥²,../00001.223444452,7(¥¥¥I²,´§µ¥¥¥¦¨,µ¥±¹¥¦¨,,¶¶·º¹¬­,¿¡¡¡¡º¹¬­,¡¡¡¡¢¤¦¨Ä¡¡¡¡©¥¬=­¡¢££¤¥±¹¬¡©¥¥¥±·º¶¢¤¦¼¯"!¡¡¤¥¬­(¥"!¡¥¥¥¬µ¥±·¡¥¥¥¥¥¥"£!¥¥ ¥¥¥¥¥)¦¯¥¥¥>?@"¨(¥¥¥ABC¥´µ¥¥¥ABC¥µ¥±¹¥DEF±±¶·º¹¥±¶··¡¡¡©±·¢£¡¢££¤)¢¤¦¢¤¦%¯"¤¥¬©¥²¿°¯¥¥¥º¹¬­#(¥¥±¡©¥G´µI¥)¡º¹¬µ¥¥±·!¡º¶¹¥±·¡"£!¡º¶·¡¡¯ "£!¡¡¡¡°¯¦¯"£!¡¢Ä°¨l¥¥"£¤,,,°¯¥¥¥¥,´­,l¥¥¦%´µ¬=µ¥¥GÄµI¥¥¥¥¥¬­¶¹¥¥¥±¹¥¬¡º¶¹±·©¥¥¡¡¡º·¡º¶¹££!¡¡¡¡¡º¥¥"££!¡¡¡%¯ ¥¥)¡¡¡Ä°¯¥¥"£!¡,´µ¥¥I±·¡,°¯¥¥±·¡¡7,°¯¥"!¡¡gÄ´µ±¶·¡¡g´µ±·¡¡¡¡cµ¥)¡¡¡¡¡f¯¥"£!¡¢!g°¯¥¥"£¤"g,°¯¥¥¥¥¦i,kl¥¥ ¦¨,,,(¥¥¦¨Ä§­,l¥¥G,,¥¬§µ¥¥¬­i¥¥¥¥±¶¹¬§¥¥¥¥"!º¹¥I¥¥¥¥"!©¥¥¦¼¯¥¥"¤±¥¬­°¯ ¥±·¹¥¬§µ¥¥)¡º¹¥¥¥¥±·¡¢¤¥¥¥±·¡¡©I¥¥¥"£!¡¤¥¥¥¥¥¥)¡¥¥¦%¯¥±·¡¥¥²,°¯"!¡ ¥¬­¿(¥"!¥¥¥¬§µ¥¥"¹¥¥¥¥¥¥¥±©>?@¥¥I±·©ABC¥¥¥"£¤uvw¥¥¥¥¥¹¥¥¥¥ ¦¼%º¶¹¥¥¦¨ÄÄ¡¡©¥¥¬­,´¡¢¤¥¥¥¬§µ¢¤I¦%¯¥¥¥¤¥¦¨,°¯¥¥¥¥GÄ´=µ¥¥¥¦¨,l¥¥¥¥¥GÄ´µ¥¥¥¥¥¬=µ¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥>?@¥¥¥¥¥¥ABC¥¥¥¯I¥uvw¥±¶°¯¥±¹±¶·¡¿(¥)º·¡¡¡´µ±·¡¡¡¡¡µ¥"!¡¡¡¡¡¥¥¥"££!¡¡¹¥¦%¯¥)¡¡©¦¨Ä°¯"£!¤¬­,,(¥¥"¥ GÄ´µ¥¥±¹¥¬=µ¥¥±·¤¥¥¥¥¥¥"£¥¥¥¦¼¯I¥¥¥¥¦¨Ä°¯¥¥¹¥¬­¿,°¯¥©¥¥¬§­,(¥º¹¥¥ ¬§µ±¡º¶¹¥¥¥±·!¡¡º¶¶¶·¡"££!¡¡¡¡¡%¯¥"£!¡¡¡,°¯I¥)¡¡¡,Ä(¥¥)¡¡¡´§µ¥±·¡¡¡µ¥¥±·¡¡¡¡';
+sEnemies='0.-*./1****,1,0*,21**-*+-*,.,2-,1-,09:**<29B*,F2,B,,F0,B.,F.,B0,F,9J*,J*,J*9T1.R+9M2,M2,M2..,,.-,.,,.-0./,.0,./6Z++[++]+,Z1+_1+a1,Z/+_/+a/,Z.+[.+a.3T1.R+.T1.R+2b/.b-.b/6B*,F2,B,,F.,F-*B/62*,71,3*,61,4*,71,4+,609..*,-**//**-*+-*,.,2-,1-,00,-**//,-*..**/3<-*:/6J*,J*,J*-<-*:/-:+*<26M2,M2,M2.b..b/.b-6Z++[++]+,Z1+_1+a1,Z-+[-+]-,Z/+_/+a/,Z.+[.+a.-<2-:--:*-<2-<-*:/..,,.-,.,,.-6R+.T1.R+.T1.R+.T1';
+function SubLife(i){if(iCurrentShields>0){iCurrentShield-=i;if(iCurrentShield<0){if(iCurrentShields>1){iCurrentShield+=100;}else{iCurrentLife+=iCurrentShield;iCurrentShield=0;}iCurrentShields--;}}else{iCurrentLife-=i;if (iCurrentLife<0){g();}}}
+function g(){bRun=0;window.setTimeout('s()',1000);}
+function d(){bRun=0;window.setTimeout('s()',1000);}
+function s(){n('end','');e('m').stop();e('em').play();}
+function e(s){return document.getElementById(s);}
+function fe(n,p,a,b){
+	aEnemiesTypes[n]=new Array();
+	aEnemiesTypes[n].iPic=p;
+	aEnemiesTypes[n].iLife=96;
+	aEnemiesTypes[n].iScore=350;
+	aEnemiesTypes[n].a=new Array();
+	aEnemiesTypes[n].b=new Array();
+	for(i=0;i<(a.length/3);i++){
+		aEnemiesTypes[n].a[i]=new Array();
+		aEnemiesTypes[n].a[i].iMoveX=a[i*3];
+		aEnemiesTypes[n].a[i].iMoveY=a[i*3+1];
+		aEnemiesTypes[n].a[i].iDuration=a[i*3+2];
+	}
+	aEnemiesTypes[n].a.iNumber=a.length/3;
+	for(i=0;i<(b.length/4);i++){
+		aEnemiesTypes[n].b[i]=new Array();
+		aEnemiesTypes[n].b[i].iDuration=b[i*4];
+		aEnemiesTypes[n].b[i].iMoveX=b[i*4+1];
+		aEnemiesTypes[n].b[i].iMoveY=b[i*4+2];
+		aEnemiesTypes[n].b[i].iType=b[i*4+3];
+	}
+	aEnemiesTypes[n].b.iNumber=b.length/4;;
+}
+function KeyDownHandler(){k[event.keyCode].d=1;}
+function KeyUpHandler(){k[event.keyCode].d=0;k[event.keyCode].t=0;}
+function fi(s){var i=new Image();i.src=s;return i;}
+function LoadMap(){for(x=0;x<9;x++){for(y=0;y<8;y++){e('map_'+x+'_'+y).src=aMapImages[sMap.charCodeAt(((y+iCurrentMapRow)*9)+x)].src;}}}
+function fb(y,w,d,ox,oy,iw,ih){
+	gb[iBullitCount]=new Array();
+	gb[iBullitCount].iX=iPlaneX;
+	gb[iBullitCount].iY=iPlaneY+y;
+	gb[iBullitCount].iMoveX=0;
+	gb[iBullitCount].iMoveY=-1;
+	gb[iBullitCount].iSpeed=aWeapons[w][0];
+	iBullitNumber++;
+	gb[iBullitCount].iLayer=iBullitNumber;
+	gb[iBullitCount].iType=w;
+	gb[iBullitCount].iDamage=d;
+	gb[iBullitCount].iOffsetX=ox;
+	gb[iBullitCount].iOffsetY=oy;
+	eImage=document.createElement('img');
+	eImage.id='b'+gb[iBullitCount].iLayer;
+	if(w==0){
+		eImage.src=aWeaponImages[0][Math.floor(Math.random()*4)].src;
+	}else{
+		eImage.src=aWeaponImages[w].src;
+	}
+	eImage.width=iw;
+	eImage.height=ih;
+	eImage.style.position='absolute';
+	eImage.style.zIndex=9;
+	eImage.style.top=-100;
+	eImage.style.left=-100;
+	document.body.appendChild(eImage);
+	iBullitCount++;
+	if((w==0)||(w>2)){
+		aLastShotWeapon[w]=iCycles;
+	}else{
+		iLastShot=iCycles;
+	}
+}
+function Update(){
+	iUpdateCount++;
+	iSpeed=2.5*iUpdateSpeed;
+	if(bRun==1){window.setTimeout('Update()',10*iUpdateSpeed);}
+	iCycles+=iUpdateSpeed;
+	if(iCurrentMapOffset<31){iCurrentMapOffset+=0.3809*iUpdateSpeed;}else{if(iCurrentMapRow<142){iCurrentMapRow++;iCurrentMapOffset=0;}}
+	if(k[38].d==1){iPlaneY-=iSpeed;if(iPlaneY<15){iPlaneY=15;}}
+	if(k[40].d==1){iPlaneY+=iSpeed;if(iPlaneY>175){iPlaneY=175;}}
+	if(k[37].d==1){iPlaneX-=iSpeed;k[37].t++;if(iPlaneX<4){iPlaneX=4;k[37].t=0;}}
+	if(k[39].d==1){iPlaneX+=iSpeed;k[39].t++;if(iPlaneX>281){iPlaneX=281;k[39].t=0;}}
+	if(k[32].d==1){
+		if((iWeapon0==1)&&(iCycles>(aLastShotWeapon[0]+aWeapons[0][1]))){fb(-2,0,32,-7,-1,14,2);}
+		if((iWeapon3==1)&&(iCycles>(aLastShotWeapon[3]+aWeapons[3][1]))){fb(-4,3,32,-1,-4,3,8);}
+		if((iWeapon4==1)&&(iCycles>(aLastShotWeapon[4]+aWeapons[4][1]))){fb(8,4,32,-7,-4,15,8);}
+		if((iCycles>(iLastShot+aWeapons[iCurrentWeapon][1]))&&(iCurrentWeapon==1)){fb(11,1,100,-11,-7,22,13);}
+		if((iCycles>(iLastShot+aWeapons[iCurrentWeapon][1]))&&(iCurrentWeapon==2)){fb(9,2,100,-6,-5,12,11);}
+	}
+	if(k[13].d==1){if(iCycles-iWeaponChanged>10){iCurrentWeapon++;iCurrentWeapon%=3;iWeaponChanged=iCycles;}}
+	for(i=0;i<iBullitCount;i++){gb[i].iX+=gb[i].iMoveX*gb[i].iSpeed*iUpdateSpeed;gb[i].iY+=gb[i].iMoveY*gb[i].iSpeed*iUpdateSpeed;}
+	for(i=0;i<iEnemiesBullitCount;i++){aEnemiesBullits[i].iX+=aEnemiesBullits[i].iMoveX*iUpdateSpeed;aEnemiesBullits[i].iY+=aEnemiesBullits[i].iMoveY*iUpdateSpeed;}
+	if((iEnemiesCount>0)&&(aEnemies[0].iTime<iCycles)){
+		aEnemiesCurrent[iEnemiesCurrentCount]=new Array();
+		aEnemiesCurrent[iEnemiesCurrentCount].iX=aEnemies[0].iX;
+		aEnemiesCurrent[iEnemiesCurrentCount].iY=-32-37;
+		aEnemiesCurrent[iEnemiesCurrentCount].iType=aEnemies[0].iType;
+		iEnemiesNumber++;
+		aEnemiesCurrent[iEnemiesCurrentCount].iLayer=iEnemiesNumber;
+		aEnemiesCurrent[iEnemiesCurrentCount].iAnim=aEnemies[0].iAnim;
+		aEnemiesCurrent[iEnemiesCurrentCount].iAnimCount=0;
+		aEnemiesCurrent[iEnemiesCurrentCount].iBullitCount=0;
+		aEnemiesCurrent[iEnemiesCurrentCount].iBullit=0;
+		aEnemiesCurrent[iEnemiesCurrentCount].iLife=aEnemiesTypes[aEnemies[0].iType].iLife;
+		aEnemiesCurrent[iEnemiesCurrentCount].iExplosion=0;
+		aEnemiesCurrent[iEnemiesCurrentCount].iDrawnExplosion=-1;
+		eImage=document.createElement('img');
+		eImage.id='e'+aEnemiesCurrent[iEnemiesCurrentCount].iLayer;
+		eImage.src=aEnemiesImages[aEnemiesTypes[aEnemies[0].iType].iPic].src;
+		eImage.width=32;
+		eImage.height=32;
+		eImage.style.position='absolute';
+		eImage.style.zIndex=9;
+		eImage.style.top=aEnemiesCurrent[iEnemiesCurrentCount].iY;
+		eImage.style.left=16+aEnemiesCurrent[iEnemiesCurrentCount].iX;
+		document.body.appendChild(eImage);
+		eImage=document.createElement('img');
+		eImage.id='e'+aEnemiesCurrent[iEnemiesCurrentCount].iLayer+'s';
+		eImage.src=aEnemiesShadowImages[aEnemiesTypes[aEnemies[0].iType].iPic].src;
+		eImage.width=32;
+		eImage.height=32;
+		eImage.style.position='absolute';
+		eImage.style.zIndex=8;
+		eImage.style.top=aEnemiesCurrent[iEnemiesCurrentCount].iY;
+		eImage.style.left=16+aEnemiesCurrent[iEnemiesCurrentCount].iX;
+		eImage.style.filter='progid:DXImageTransform.Microsoft.Alpha(opacity=50)';
+		document.body.appendChild(eImage);
+		iEnemiesCurrentCount++;
+		aEnemies.splice(0,1);
+		iEnemiesCount--;
+	}
+	for(i=0;i<iEnemiesCurrentCount;i++){if(aEnemiesCurrent[i].iExplosion==0){aEnemiesCurrent[i].iX+=aEnemiesTypes[aEnemiesCurrent[i].iType].a[aEnemiesCurrent[i].iAnim].iMoveX*iUpdateSpeed;aEnemiesCurrent[i].iY+=aEnemiesTypes[aEnemiesCurrent[i].iType].a[aEnemiesCurrent[i].iAnim].iMoveY*iUpdateSpeed;}else{aEnemiesCurrent[i].iY+=0.3809*iUpdateSpeed;}}
+	if(iBossActive==1){
+		iBossX+=aBossAnims[iBossAnim].iMoveX*iUpdateSpeed;
+		iBossY+=aBossAnims[iBossAnim].iMoveY*iUpdateSpeed;
+		if((iBossAnim>0)&&(iBossBullitCount>aBossBullits[iBossBullit].iDuration)){
+			aEnemiesBullits[iEnemiesBullitCount]=new Array();
+			aEnemiesBullits[iEnemiesBullitCount].iX=iBossX;
+			aEnemiesBullits[iEnemiesBullitCount].iY=iBossY;
+			aEnemiesBullits[iEnemiesBullitCount].iMoveX=aBossBullits[iBossBullit].iMoveX;
+			aEnemiesBullits[iEnemiesBullitCount].iMoveY=aBossBullits[iBossBullit].iMoveY;
+			iBullitNumber++;
+			aEnemiesBullits[iEnemiesBullitCount].iLayer=iBullitNumber;
+			aEnemiesBullits[iEnemiesBullitCount].iType=aBossBullits[iBossBullit].iType;
+			eImage=document.createElement('img');
+			eImage.id='b'+aEnemiesBullits[iEnemiesBullitCount].iLayer;
+			eImage.src=aEnemiesBullitsImages[aEnemiesBullits[iEnemiesBullitCount].iType].src;
+			eImage.width=27;
+			eImage.height=16;
+			eImage.style.position='absolute';
+			eImage.style.zIndex=9;
+			eImage.style.top=aEnemiesBullits[iEnemiesBullitCount].iY+8;
+			eImage.style.left=16+aEnemiesBullits[iEnemiesBullitCount].iX-13;
+			document.body.appendChild(eImage);
+			iEnemiesBullitCount++;
+			iBossBullitCount=0;
+			iBossBullit++;
+			iBossBullit%=aBossBullits.iNumber;
+		} else {
+			iBossBullitCount+=iUpdateSpeed;
+		}
+	}
+	if(iBossLife<0){d();}
+	for(i=0;i<iBullitCount;i++){if((gb[i].iX<-8)||(gb[i].iY<-8)||(gb[i].iX>296)||(gb[i].iY>208)){e('b'+gb[i].iLayer).removeNode(true);gb.splice(i,1);iBullitCount--;i--;}}
+	for(i=0;i<iEnemiesBullitCount;i++){
+		if((aEnemiesBullits[i].iX<-13)||(aEnemiesBullits[i].iY<-28)||(aEnemiesBullits[i].iX>298)||(aEnemiesBullits[i].iY>208)){
+			e('b'+aEnemiesBullits[i].iLayer).removeNode(true);
+			aEnemiesBullits.splice(i,1);
+			iEnemiesBullitCount--;
+			i--;
+		}
+	}
+	if(iCycles>12100){iBossActive=1;}
+	for(i=0;i<iEnemiesCurrentCount;i++){
+		if((aEnemiesTypes[aEnemiesCurrent[i].iType].b.iNumber>0)&&(aEnemiesCurrent[i].iBullitCount>aEnemiesTypes[aEnemiesCurrent[i].iType].b[aEnemiesCurrent[i].iBullit].iDuration)){
+			aEnemiesBullits[iEnemiesBullitCount]=new Array();
+			aEnemiesBullits[iEnemiesBullitCount].iX=aEnemiesCurrent[i].iX;
+			aEnemiesBullits[iEnemiesBullitCount].iY=aEnemiesCurrent[i].iY;
+			aEnemiesBullits[iEnemiesBullitCount].iMoveX=aEnemiesTypes[aEnemiesCurrent[i].iType].b[aEnemiesCurrent[i].iBullit].iMoveX;
+			aEnemiesBullits[iEnemiesBullitCount].iMoveY=aEnemiesTypes[aEnemiesCurrent[i].iType].b[aEnemiesCurrent[i].iBullit].iMoveY;
+			iBullitNumber++;
+			aEnemiesBullits[iEnemiesBullitCount].iLayer=iBullitNumber;
+			aEnemiesBullits[iEnemiesBullitCount].iType=aEnemiesTypes[aEnemiesCurrent[i].iType].b[aEnemiesCurrent[i].iBullit].iType;
+			eImage=document.createElement('img');
+			eImage.id='b'+aEnemiesBullits[iEnemiesBullitCount].iLayer;
+			eImage.src=aEnemiesBullitsImages[aEnemiesBullits[iEnemiesBullitCount].iType].src;
+			eImage.width=27;
+			eImage.height=16;
+			eImage.style.position='absolute';
+			eImage.style.zIndex=9;
+			eImage.style.top=aEnemiesBullits[iEnemiesBullitCount].iY+8;
+			eImage.style.left=16+aEnemiesBullits[iEnemiesBullitCount].iX-13;
+			document.body.appendChild(eImage);
+			iEnemiesBullitCount++;
+			aEnemiesCurrent[i].iBullitCount=0;
+			aEnemiesCurrent[i].iBullit++;
+			aEnemiesCurrent[i].iBullit%=aEnemiesTypes[aEnemiesCurrent[i].iType].b.iNumber;
+		} else {
+			aEnemiesCurrent[i].iBullitCount+=iUpdateSpeed;
+		}
+		if(aEnemiesCurrent[i].iAnimCount>aEnemiesTypes[aEnemiesCurrent[i].iType].a[aEnemiesCurrent[i].iAnim].iDuration){
+			aEnemiesCurrent[i].iAnimCount=0;
+			aEnemiesCurrent[i].iAnim++;
+			aEnemiesCurrent[i].iAnim%=aEnemiesTypes[aEnemiesCurrent[i].iType].a.iNumber;
+		}else{
+			aEnemiesCurrent[i].iAnimCount+=iUpdateSpeed;
+		}
+	}
+	if(iBossActive==1){
+		if(iBossAnimCount>aBossAnims[iBossAnim].iDuration){iBossAnimCount=0;iBossAnim++;iBossAnim%=aBossAnims.iNumber;if(iBossAnim==0){iBossAnim=1;}}else{iBossAnimCount+=iUpdateSpeed;}
+		for(i=0;i<iBullitCount;i++){
+			if((fa(gb[i].iX-iBossX)<32)&&
+				(fa(gb[i].iY-iBossY)<16)){
+				iBossLife-=gb[i].iDamage;
+				e('b'+gb[i].iLayer).removeNode(true);
+				gb.splice(i,1);
+				iBullitCount--;
+				i--;
+			}
+		}
+		if((fa(iPlaneX-iBossX)<64)&&(fa(iPlaneY-iBossY)<32)){SubLife(2);}
+	}
+	for(i=0;i<iEnemiesCurrentCount;i++){
+		if((aEnemiesCurrent[i].iY>220)||(aEnemiesCurrent[i].iX<-100)||(aEnemiesCurrent[i].iX>420)){
+			e('e'+aEnemiesCurrent[i].iLayer).removeNode(true);
+			e('e'+aEnemiesCurrent[i].iLayer+'s').removeNode(true);
+			aEnemiesCurrent.splice(i,1);
+			iEnemiesCurrentCount--;
+			i--;
+		}
+	}
+	for(i=0;i<iEnemiesBullitCount;i++){
+		if((fa(aEnemiesBullits[i].iX-iPlaneX)<16)&&(fa(aEnemiesBullits[i].iY-iPlaneY)<16)){
+			if(aEnemiesBullits[i].iType==0){SubLife(2);}else{SubLife(4);}
+			e('b'+aEnemiesBullits[i].iLayer).removeNode(true);
+			aEnemiesBullits.splice(i,1);
+			iEnemiesBullitCount--;
+			i--;
+		}
+	}
+	for(j=0;j<iEnemiesCurrentCount;j++){
+		if(aEnemiesCurrent[j].iExplosion==0){
+			for(i=0;i<iBullitCount;i++){
+				if((fa(gb[i].iX-aEnemiesCurrent[j].iX)<16)&&
+					(fa(gb[i].iY-aEnemiesCurrent[j].iY)<16)){
+					aEnemiesCurrent[j].iLife-=gb[i].iDamage;
+					e('b'+gb[i].iLayer).removeNode(true);
+					gb.splice(i,1);
+					iBullitCount--;
+					i--;
+				}
+			}
+			if((fa(iPlaneX-aEnemiesCurrent[j].iX)<32)&&(fa(iPlaneY-aEnemiesCurrent[j].iY)<32)){
+				aEnemiesCurrent[j].iLife=0;
+				SubLife(10);
+			}
+			if(aEnemiesCurrent[j].iLife<=0){
+				aEnemiesCurrent[j].iExplosion=iCycles;
+				n('e'+aEnemiesCurrent[j].iLayer+'s','none');
+				iScore+=aEnemiesTypes[aEnemiesCurrent[j].iType].iScore;
+			}
+		}else{
+			if(iCycles-aEnemiesCurrent[j].iExplosion>24){
+				e('e'+aEnemiesCurrent[j].iLayer).removeNode(true);
+				e('e'+aEnemiesCurrent[j].iLayer+'s').removeNode(true);
+				aEnemiesCurrent.splice(j,1);
+				iEnemiesCurrentCount--;
+				j--;
+			}else{
+				iNew=Math.floor((iCycles-aEnemiesCurrent[j].iExplosion)/2);
+				if(iNew>11){iNew=11;}
+				if(aEnemiesCurrent[j].iDrawnExplosion!=iNew){
+					e('e'+aEnemiesCurrent[j].iLayer).src=aExplosionImages[iNew].src;
+					aEnemiesCurrent[j].iDrawnExplosion=iNew;
+				}
+			}
+		}
+	}
+}
+function fa(i){return i<0?i*-1:i;}
+function Draw(){
+	if(iCurrentMapRow!=iDrawnMapRow){LoadMap();iDrawnMapRow=iCurrentMapRow;}
+	if(iDrawnMapOffset!=iCurrentMapOffset){e('maplayer').style.top=iCurrentMapOffset-56;iDrawnMapOffset=iCurrentMapOffset;}
+	if(iBossActive==1){
+		if(iBossX!=iDrawnBossX){e('boss').style.left=16+iBossX-38;e('bossshadow').style.left=(iBossX*0.715)+30;iDrawnBossX=iBossX;}
+		if(iBossY!=iDrawnBossY){e('boss').style.top=iBossY-18;e('bossshadow').style.top=(iBossY*0.78)+22;iDrawnBossY=iBossY;}
+	}
+	if(iPlaneX!=iDrawnPlaneX){e('plane').style.left=16+iPlaneX-13;e('planeshadow').style.left=(iPlaneX*0.715)+41;iDrawnPlaneX=iPlaneX;}
+	if(iPlaneY!=iDrawnPlaneY){e('plane').style.top=iPlaneY-15;e('planeshadow').style.top=(iPlaneY*0.78)+22;iDrawnPlaneY=iPlaneY;}
+	if(k[37].t>10){SetPlane(0);
+	}else if((k[37].t>5)&&(k[37].t<=10)){SetPlane(1);
+	}else if(k[39].t>10){SetPlane(4);
+	}else if((k[39].t>5)&&(k[39].t<=10)){SetPlane(3);
+	}else{SetPlane(2);}
+	for(i=0;i<iBullitCount;i++){e('b'+gb[i].iLayer).style.top=gb[i].iY+gb[i].iOffsetY;e('b'+gb[i].iLayer).style.left=16+gb[i].iX+gb[i].iOffsetX;}
+	for(i=0;i<iEnemiesBullitCount;i++){e('b'+aEnemiesBullits[i].iLayer).style.top=aEnemiesBullits[i].iY+8;e('b'+aEnemiesBullits[i].iLayer).style.left=16+aEnemiesBullits[i].iX-13;}
+	for(i=0;i<iEnemiesCurrentCount;i++){
+		e('e'+aEnemiesCurrent[i].iLayer).style.top=aEnemiesCurrent[i].iY;
+		e('e'+aEnemiesCurrent[i].iLayer).style.left=aEnemiesCurrent[i].iX;
+		e('e'+aEnemiesCurrent[i].iLayer+'s').style.top=(aEnemiesCurrent[i].iY*0.78)+22;
+		e('e'+aEnemiesCurrent[i].iLayer+'s').style.left=(aEnemiesCurrent[i].iX*0.715)+41;
+	}
+	if(iDrawnScore!=iScore){
+		iNewScore=iScore;
+		for(i=0;i<8;i++){e('s'+(7-i)).src=aFontImages[iNewScore%10].src;iNewScore=Math.floor(iNewScore/10);}
+		iDrawnScore=iScore;
+	}
+	if(iDrawnShield!=iCurrentShield){
+		for(i=0;i<100;i++){e('sb'+i).style.visibility=i<iCurrentShield?'visible':'hidden';}
+		iDrawnShield=iCurrentShield;
+	}
+	if(iDrawnShields!=iCurrentShields){
+		for(i=0;i<5;i++){e('shield'+i).style.display=i<iCurrentShields?'':'none';}
+		iDrawnShields=iCurrentShields;
+	}
+	if(iDrawnLife!=iCurrentLife){
+		for(i=0;i<100;i++){e('lb'+i).style.visibility=i<iCurrentLife?'visible':'hidden';}
+		iDrawnLife=iCurrentLife;
+	}
+	if(iDrawnWeapon!=iCurrentWeapon){
+		e('weapon').src=aHudWeaponImages[iCurrentWeapon].src;
+		iDrawnWeapon=iCurrentWeapon;
+	}
+	if(bRun==1){window.setTimeout('Draw()',10);}
+}
+
+function SetPlane(iPlane){if(iDrawnPlane!=iPlane){e('planeimg').src=aPlaneImages[iPlane].src;e('planeimgshadow').src=aPlaneShadowImages[iPlane].src;iDrawnPlane=iPlane;}}
+
+function Init(){
+	for(i=0;i<256;i++){k[i]=new Array();k[i].d=0;k[i].t=0;}
+	for(i=0;i<3;i++){aEnemiesBullitsImages[i]=fi('p/b/'+i+'.gif');aHudWeaponImages[i]=fi('p/h/'+i+'.gif');}
+	for(i=0;i<5;i++){aPlaneImages[i]=fi('p/p'+i+'.gif');aPlaneShadowImages[i]=fi('p/p'+i+'_s.gif');}
+	for(i=0;i<10;i++){aFontImages[i]=fi('p/f/'+i+'.gif');}
+	aWeaponImages[0]=new Array();
+	for(i=0;i<5;i++){aWeaponImages[0][i]=fi('p/w/0'+i+'.gif');if (i>0){aWeaponImages[i]=fi('p/w/'+i+'.gif');}}
+	for(i=0;i<8;i++){aEnemiesImages[i]=fi('p/n/'+i+'.gif');aEnemiesShadowImages[i]=fi('p/n/'+i+'s.gif');}
+	for(i=0;i<12;i++){aExplosionImages[i]=fi('p/e/'+i+'.gif');}
+	for(i=0;i<256;i++){aMapImages[i]=fi('p/m/'+i+'.gif');}
+	for(i=0;i<10;i++){aWeapons[i]=new Array();}
+	aWeapons=[[8,2],[4,20],[4,20],[3,20],[4,6]];
+	for(i=0;i<iEnemiesCount;i++){
+		aEnemies[i]=new Array();
+		aEnemies[i].iTime=iEnemiesTime+=25*(sEnemies.charCodeAt(i*3)-42);
+		aEnemies[i].iType=Math.floor((sEnemies.charCodeAt(i*3+1)-42)/8);
+		aEnemies[i].iAnim=Math.floor((sEnemies.charCodeAt(i*3+1)-42)%8);
+		aEnemies[i].iX=16+32*(sEnemies.charCodeAt(i*3+2)-42);
+	}
+	fe(0,0,[0,0.7,172,1,0.7,64,0,0.7,172,-1,0.7,64,0,0.7,999],[72,0,2,0]);
+	fe(1,7,[0.25,0.25,999,0.5,0.25,999,0.5,0.5,999,-0.25,0.25,999,-0.5,0.25,999,-0.5,0.5,999],[]);
+	fe(2,1,[0,1,128,1,1,64,0,1,128,-1,1,64],[72,0,3,1]);
+	fe(3,2,[0,2,16,2,2,16,2,0.38,16,2,2,16,0,2,16,-2,2,16,-2,0.38,16,-2,2,16],[12,0,3,2,32,0,3,2]);
+	fe(4,3,[0,2,58,2,2,24,2,0,999,0,2,58,-2,2,24,-2,0,999],[48,0,3,1]);
+	fe(5,5,[0,2,30,4,4,999,0,2,30,-4,4,999],[32,0,2,0]);
+	fe(6,4,[0,2,999,0,2,64,1,2,999,0,2,48,2,2,999,0,2,64,-1,2,999,0,2,48,-2,2,999],[]);
+	fe(7,6,[0,1.5,999],[48,2,2,0,0,-2,2,0,10,2,2,0,0,-2,2,0]);
+	aBossAnims[0]=new Array();
+	aBossAnims[0].iMoveX=0;
+	aBossAnims[0].iMoveY=0.7;
+	aBossAnims[0].iDuration=200;
+	aBossAnims[1]=new Array();
+	aBossAnims[1].iMoveX=-0.5;
+	aBossAnims[1].iMoveY=0.5;
+	aBossAnims[1].iDuration=100;
+	aBossAnims[2]=new Array();
+	aBossAnims[2].iMoveX=0;
+	aBossAnims[2].iMoveY=-0.5;
+	aBossAnims[2].iDuration=200;
+	aBossAnims[3]=new Array();
+	aBossAnims[3].iMoveX=0.5;
+	aBossAnims[3].iMoveY=0.5;
+	aBossAnims[3].iDuration=200;
+	aBossAnims[4]=new Array();
+	aBossAnims[4].iMoveX=0;
+	aBossAnims[4].iMoveY=-0.5;
+	aBossAnims[4].iDuration=200;
+	aBossAnims[5]=new Array();
+	aBossAnims[5].iMoveX=-0.5;
+	aBossAnims[5].iMoveY=0.5;
+	aBossAnims[5].iDuration=100;
+	aBossAnims.iNumber=6;
+	for(i=0;i<8;i++){aBossBullits[i]=new Array();}
+	aBossBullits[0].iDuration=160;
+	aBossBullits[0].iMoveX=0;
+	aBossBullits[0].iMoveY=2;
+	aBossBullits[0].iType=0;
+	aBossBullits[1].iDuration=1;
+	aBossBullits[1].iMoveX=0;
+	aBossBullits[1].iMoveY=3;
+	aBossBullits[1].iType=1;
+	aBossBullits[2].iDuration=16;
+	aBossBullits[2].iMoveX=0;
+	aBossBullits[2].iMoveY=2;
+	aBossBullits[2].iType=0;
+	aBossBullits[3].iDuration=1;
+	aBossBullits[3].iMoveX=0;
+	aBossBullits[3].iMoveY=3;
+	aBossBullits[3].iType=1;
+	aBossBullits[4].iDuration=16;
+	aBossBullits[4].iMoveX=0;
+	aBossBullits[4].iMoveY=2;
+	aBossBullits[4].iType=0;
+	aBossBullits[5].iDuration=1;
+	aBossBullits[5].iMoveX=0;
+	aBossBullits[5].iMoveY=3;
+	aBossBullits[5].iType=1;
+	aBossBullits[6].iDuration=16;
+	aBossBullits[6].iMoveX=0;
+	aBossBullits[6].iMoveY=2;
+	aBossBullits[6].iType=0;
+	aBossBullits[7].iDuration=1;
+	aBossBullits[7].iMoveX=0;
+	aBossBullits[7].iMoveY=3;
+	aBossBullits[7].iType=1;
+	aBossBullits.iNumber=8;
+	LoadMap();
+	window.focus();
+}
+function n(s,d){e(s).style.display=d;}
+function Start(){Draw();Update();n('menu','none');n('menuover','none');e('m').play();e('im').stop();}
+function InitMapLayer(){
+	document.write('<div id="maplayer" style="z-index: 0; position: absolute; left: 16; top: 0;"><table cellspacing="0" cellpadding="0" border="0">');
+	for(iY=0;iY<8;iY++){
+		document.write('<tr>');
+		for(iX=0;iX<9;iX++){document.write('<td><img id="map_' + iX + '_' + (7 - iY) + '" width="32" height="32"></td>');}
+		document.write('</tr>');
+	}
+	document.write('</table></div>');
+}
+</script></head><body style="margin: 0px;" onload="Init();" margin="0" onkeydown="KeyDownHandler();" onkeyup="KeyUpHandler();">
+<script language="Javascript">InitMapLayer();</script>
+<div id=boss style="z-index: 10; position: absolute; left: 122; top: -99;"><img id=bosssimg src="p/n/b.gif"></div>
+<div id=bossshadow style="filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); z-index: 9; position: absolute; left: 122; top: -99;"><img id=bossimgshadow src="p/n/bs.gif"></div>
+<div id=plane style="z-index: 10; position: absolute; left: 0; top: 0;"><img id=planeimg src="p/p1.gif"></div>
+<div id=planeshadow style="filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50); z-index: 9; position: absolute; left: 0; top: 0;"><img id=planeimgshadow src="p/p4_s.gif"></div>
+<div id=score style="z-index: 20; position: absolute; left: 120; top: 2;"><img src="p/f/$.gif"><img id=s0><img id=s1><img id=s2><img id=s3><img id=s4><img id=s5><img id=s6><img id=s7></div>
+<div id=shields style="z-index: 20; position: absolute; left: 21; top: 4;"><img id=shield0 style="display: none; margin-right: 3" src="p/h.gif"><img id=shield1 style="display: none; margin-right: 3px" src="p/h.gif"><img id=shield2 style="display: none; margin-right: 3px" src="p/h.gif"><img id=shield3 style="display: none; margin-right: 3px" src="p/h.gif"><img id=shield4 style="display: none;" src="p/h.gif"></div>
+<div id=life style="z-index: 20; position: absolute; left: 304; top: 0; padding-left: 4; width: 16; background-color: #000000"><script language="Javascript">for(i=99;i>=0;i--){document.write('<img id=lb'+i+' src="p/b.gif" style="background-color: rgb('+(i/99*120+100)+','+(i/99*96+16)+','+(i/99*52+8)+');"><br>');}</script></div>
+<div id=shield style="z-index: 20; position: absolute; left: 0; top: 0; padding-left: 8; width: 16; background-color: #000000"><script language="Javascript">for(i=99;i>=0;i--){document.write('<img id=sb'+i+' src="p/b.gif" style="background-color: rgb('+(i/99*120+100)+','+(i/99*96+16)+','+(i/99*52+8)+');"><br>');}</script></div>
+<div style="position: absolute; top: 0; left: 0; z-index: -1000"><textarea id=area></textarea></div>
+<img src="p/a.gif" width=16 height=16 id=weapon style="position: absolute; top: 2; left: 287; z-index: 200;">
+<img src="p/s.gif" width=320 height=200 id=menu style="position: absolute; top: 0; left: 0; z-index: 200;" galleryimg="false">
+<img src="p/e.gif" width=320 height=200 id=end style="display:none;position:absolute;top:0;left:0;z-index:300;" galleryimg="false">
+<img src="p/a.gif" width=107 height=11 id=menuover style="position: absolute; top: 89; left: 110; z-index: 200;" onclick="Start();" onmouseover="this.src='p/so.gif';" onmouseout="this.src='p/a.gif';">
+<embed id=m src="s.mid" autoplay=false loop=true style="position: absolute; top: 1000; left:0;"><embed id="em" src="e.mid" autoplay=false loop=false style="position: absolute; top: 1000; left:0;"><embed id="im" src="i.mid" autoplay=true loop=false style="position: absolute; top: 1000; left:0;">
+</body></html>
